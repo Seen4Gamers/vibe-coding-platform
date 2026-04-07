@@ -1,5 +1,4 @@
 import { createClient } from '@/lib/supabase/server'
-import { headers } from 'next/headers'
 
 // Admin password - in production, use environment variables
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123'
@@ -104,6 +103,6 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Invalid action' }, { status: 400 })
   } catch (error) {
     console.error('[offers] POST error:', error)
-    return Response.json({ error: error.message }, { status: 500 })
+    return Response.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
   }
 }

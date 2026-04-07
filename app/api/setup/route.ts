@@ -39,7 +39,7 @@ export async function GET() {
       `
     })
 
-    if (createError && !createError.message.includes('already exists')) {
+    if (createError && !createError.message?.includes('already exists')) {
       console.error('Table creation error:', createError)
     }
 

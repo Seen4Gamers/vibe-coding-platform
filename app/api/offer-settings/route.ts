@@ -88,6 +88,6 @@ export async function POST(request: Request) {
     return Response.json(result)
   } catch (error) {
     console.error('[timer] POST error:', error)
-    return Response.json({ error: error.message }, { status: 500 })
+    return Response.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
   }
 }
