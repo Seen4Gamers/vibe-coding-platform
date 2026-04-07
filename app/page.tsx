@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { TodaysOfferSection } from '@/components/todays-offer-section'
 
 export default function Home() {
   return (
@@ -7,11 +8,19 @@ export default function Home() {
       <header className="border-b border-gray-200 dark:border-gray-800">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-primary">Vibe Coding Platform</h1>
-          <Link href="/analytics" className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition">
-            View Analytics
-          </Link>
+          <div className="flex gap-4 items-center">
+            <Link href="/admin" className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:opacity-90 transition text-sm">
+              Admin
+            </Link>
+            <Link href="/analytics" className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition">
+              View Analytics
+            </Link>
+          </div>
         </nav>
       </header>
+
+      {/* Today's Offer Section */}
+      <TodaysOfferSection />
 
       {/* Hero Section */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
