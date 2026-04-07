@@ -3,7 +3,7 @@ import { NextResponse } from "next/server"
 
 export async function GET() {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Create the table if it doesn't exist
     const { error: createError } = await supabase.rpc('exec', {
