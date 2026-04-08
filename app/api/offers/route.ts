@@ -28,16 +28,24 @@ async function ensureTables(supabase: any) {
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   const supabase = await createClient()
+  const url = new URL(request.url)
+  const categoryId = url.searchParams.get('categoryId')
   
   try {
     await ensureTables(supabase)
     
-    const { data: offers, error } = await supabase
+    let query = supabase
       .from('daily_offers')
       .select('*')
       .order('created_at', { ascending: false })
+    
+    if (categoryId) {
+      query = query.eq('category_id', categoryId)
+    }
+    
+    const { data: offers, error } = await query
 
     if (error) throw error
 
@@ -62,7 +70,7 @@ export async function POST(request: Request) {
   const body = await request.json()
 
   try {
-    const { id, title, description, price, image_url, action } = body
+    const { id, title, description, price, image_url, category_id, action } = body
 
     if (action === 'create') {
       const { data, error } = await supabase
@@ -72,6 +80,7 @@ export async function POST(request: Request) {
           description,
           price,
           image_url,
+          category_id: category_id || null,
         })
         .select()
 
@@ -92,7 +101,7 @@ export async function POST(request: Request) {
     if (action === 'update') {
       const { data, error } = await supabase
         .from('daily_offers')
-        .update({ title, description, price, image_url })
+        .update({ title, description, price, image_url, category_id: category_id || null })
         .eq('id', id)
         .select()
 

@@ -1,10 +1,10 @@
-import { AdminPanel } from '@/components/admin-panel'
+import { EnhancedAdminPanel } from '@/components/enhanced-admin-panel'
 
 export const metadata = {
   title: 'Admin Panel - Vibe Coding Platform',
-  description: 'Manage today&apos;s offers and countdown timer',
+  description: 'Manage categories, offers, and countdown timers',
 }
 
 export default function AdminPage() {
-  return <AdminPanel />
+  return <EnhancedAdminPanel />
 }

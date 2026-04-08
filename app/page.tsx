@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { TodaysOfferSection } from '@/components/todays-offer-section'
+import { CategorizedTodaysOfferSection } from '@/components/categorized-todays-offer-section'
 
 export default function Home() {
   return (
@@ -75,7 +75,7 @@ export default function Home() {
         </section>
 
         {/* Today's Offer Section - Under Categories */}
-        <TodaysOfferSection />
+        <CategorizedTodaysOfferSection />
 
         {/* Stats Preview */}
         <section className="bg-white dark:bg-gray-900 p-12 rounded-lg border border-gray-200 dark:border-gray-800">
