@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 
 export async function POST() {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   try {
     // Create tables using raw SQL via Supabase

@@ -7,8 +7,8 @@ export async function POST(request: Request) {
     const body = await request.json()
     const { path, referrer, userAgent, deviceType, browser, os } = body
 
-    const supabase = createClient()
-    const headersList = headers()
+    const supabase = await createClient()
+    const headersList = await headers()
     const forwardedFor = headersList.get('x-forwarded-for')
     const ipAddress = forwardedFor ? forwardedFor.split(',')[0] : headersList.get('x-real-ip') || 'unknown'
 

@@ -11,7 +11,7 @@ async function verifyAdmin(request: Request) {
 }
 
 export async function GET() {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   try {
     const { data: settings, error } = await supabase
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const body = await request.json()
 
   try {
@@ -88,6 +88,6 @@ export async function POST(request: Request) {
     return Response.json(result)
   } catch (error) {
     console.error('[timer] POST error:', error)
-    return Response.json({ error: error.message }, { status: 500 })
+    return Response.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
   }
 }
