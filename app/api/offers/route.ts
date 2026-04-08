@@ -1,5 +1,4 @@
 import { createClient } from '@/lib/supabase/server'
-import { headers } from 'next/headers'
 
 // Admin password - in production, use environment variables
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123'
@@ -30,7 +29,7 @@ async function ensureTables(supabase: any) {
 }
 
 export async function GET() {
-  const supabase = createClient()
+  const supabase = await createClient()
   
   try {
     await ensureTables(supabase)
@@ -59,7 +58,7 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const body = await request.json()
 
   try {
