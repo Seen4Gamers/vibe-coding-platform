@@ -1,23 +1,18 @@
 import { createClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
-import { headers } from "next/headers"
 
 export async function POST(request: Request) {
   try {
     const body = await request.json()
     const { path, referrer, userAgent, deviceType, browser, os } = body
 
-    const supabase = createClient()
-    const headersList = headers()
-    const forwardedFor = headersList.get('x-forwarded-for')
-    const ipAddress = forwardedFor ? forwardedFor.split(',')[0] : headersList.get('x-real-ip') || 'unknown'
+    const supabase = await createClient()
 
-    // Insert page view
+    // Insert page view - only use columns that exist in the schema
     const { error } = await supabase.from('page_views').insert({
       path,
       referrer: referrer || null,
       user_agent: userAgent,
-      ip_address: ipAddress,
       device_type: deviceType,
       browser,
       os,
