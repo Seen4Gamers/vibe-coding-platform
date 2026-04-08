@@ -19,9 +19,6 @@ export default function Home() {
         </nav>
       </header>
 
-      {/* Today's Offer Section */}
-      <TodaysOfferSection />
-
       {/* Hero Section */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center mb-20">
@@ -76,6 +73,9 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Today's Offer Section - Under Categories */}
+        <TodaysOfferSection />
 
         {/* Stats Preview */}
         <section className="bg-white dark:bg-gray-900 p-12 rounded-lg border border-gray-200 dark:border-gray-800">
