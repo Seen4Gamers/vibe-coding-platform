@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactCompiler: true,
+  // Disabled React Compiler - package not installed
+  // reactCompiler: true,
 }
 
 module.exports = nextConfig
