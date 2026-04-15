@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { TodaysOfferSection } from '@/components/todays-offer-section'
+import { NetflixCategory } from '@/components/netflix-category'
 
 export default function Home() {
   return (
@@ -90,6 +91,9 @@ export default function Home() {
           </div>
         </section>
       </main>
+
+      {/* Netflix Category Section */}
+      <NetflixCategory />
 
       {/* Footer */}
       <footer className="border-t border-gray-200 dark:border-gray-800 mt-20">
