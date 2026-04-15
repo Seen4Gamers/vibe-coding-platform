@@ -45,12 +45,15 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  if (!(await verifyAdmin(request))) {
+  const body = await request.json()
+  const { autoReset } = body
+
+  // Allow auto-reset without authentication, but require auth for manual updates
+  if (!autoReset && !(await verifyAdmin(request))) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
   const supabase = await createClient()
-  const body = await request.json()
 
   try {
     const { hours = 24 } = body

@@ -75,9 +75,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Today's Offer Section - Under Categories */}
-        <TodaysOfferSection />
-
         {/* Stats Preview */}
         <section className="bg-white dark:bg-gray-900 p-12 rounded-lg border border-gray-200 dark:border-gray-800">
           <h3 className="text-2xl font-bold text-foreground mb-8 text-center">Your Analytics Dashboard</h3>
@@ -94,6 +91,9 @@ export default function Home() {
 
       {/* Netflix Category Section */}
       <NetflixCategory />
+
+      {/* Today's Offer Section - With 24-hour auto-reset timer */}
+      <TodaysOfferSection />
 
       {/* Footer */}
       <footer className="border-t border-gray-200 dark:border-gray-800 mt-20">
