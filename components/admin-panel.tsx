@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
 interface Offer {
@@ -18,6 +18,8 @@ export function AdminPanel() {
   const [offers, setOffers] = useState<Offer[]>([])
   const [timerHours, setTimerHours] = useState(24)
   const [loading, setLoading] = useState(false)
+  const [ps5Name, setPs5Name] = useState('PlayStation 5')
+  const [ps5Loading, setPs5Loading] = useState(false)
 
   // Form state for new offer
   const [formData, setFormData] = useState({
@@ -35,6 +37,7 @@ export function AdminPanel() {
     if (password === adminPassword) {
       setAuthenticated(true)
       loadOffers()
+      loadSiteSettings()
     } else {
       alert('Invalid password')
       setPassword('')
@@ -48,6 +51,18 @@ export function AdminPanel() {
       setOffers(data.offers || [])
     } catch (error) {
       console.error('[admin] Error loading offers:', error)
+    }
+  }
+
+  const loadSiteSettings = async () => {
+    try {
+      const res = await fetch('/api/site-settings')
+      const data = await res.json()
+      if (data.settings?.primary_ps5_name) {
+        setPs5Name(data.settings.primary_ps5_name)
+      }
+    } catch (error) {
+      console.error('[admin] Error loading site settings:', error)
     }
   }
 
@@ -137,11 +152,33 @@ export function AdminPanel() {
       if (!res.ok) throw new Error('Failed to update timer')
 
       alert('Timer updated successfully!')
-      // Refresh page to show new timer
       router.refresh()
     } catch (error) {
       console.error('[admin] Error updating timer:', error)
       alert('Failed to update timer')
+    }
+  }
+
+  const handleUpdatePs5Name = async () => {
+    setPs5Loading(true)
+    try {
+      const res = await fetch('/api/site-settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${password}`,
+        },
+        body: JSON.stringify({ key: 'primary_ps5_name', value: ps5Name }),
+      })
+
+      if (!res.ok) throw new Error('Failed to update PS5 name')
+
+      alert('PS5 name updated successfully!')
+    } catch (error) {
+      console.error('[admin] Error updating PS5 name:', error)
+      alert('Failed to update PS5 name')
+    } finally {
+      setPs5Loading(false)
     }
   }
 
@@ -193,6 +230,35 @@ export function AdminPanel() {
           </button>
         </div>
 
+        {/* PS5 Name Settings */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">PS5 Section Settings</h2>
+          <div className="flex items-end gap-4">
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Primary PS5 Name
+              </label>
+              <input
+                type="text"
+                value={ps5Name}
+                onChange={(e) => setPs5Name(e.target.value)}
+                placeholder="e.g., PlayStation 5, PS5 Plus"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <button
+              onClick={handleUpdatePs5Name}
+              disabled={ps5Loading}
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:bg-gray-400"
+            >
+              {ps5Loading ? 'Saving...' : 'Update Name'}
+            </button>
+          </div>
+          <p className="text-sm text-gray-600 mt-2">
+            This name will be displayed in the PS5 category section on the homepage
+          </p>
+        </div>
+
         {/* Timer Settings */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Timer Settings</h2>
@@ -217,7 +283,7 @@ export function AdminPanel() {
               Update Timer
             </button>
           </div>
-          <p className="text-sm text-gray-600 mt-2">Current timer will restart when updated</p>
+          <p className="text-sm text-gray-600 mt-2">Timer auto-resets every 24 hours at midnight UTC</p>
         </div>
 
         {/* Add/Edit Offer Form */}
@@ -304,7 +370,7 @@ export function AdminPanel() {
 
         {/* Offers List */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Offers ({offers.length})</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Today&apos;s Offers ({offers.length})</h2>
 
           {offers.length === 0 ? (
             <p className="text-gray-500 text-center py-8">No offers added yet</p>
